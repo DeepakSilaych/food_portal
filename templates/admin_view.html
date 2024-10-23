@@ -1,0 +1,73 @@
+{% extends "base_generic.html" %}
+{% block content %}
+  <div class="container mt-5">
+    <h2>Food Bookings</h2>
+
+    <!-- Date Filter Form -->
+    <form method="GET">
+      <div class="row mb-4">
+        <div class="col">
+          <input type="datetime-local" name="start" class="form-control" placeholder="Start Time">
+        </div>
+        <div class="col">
+          <input type="datetime-local" name="end" class="form-control" placeholder="End Time">
+        </div>
+        <div class="col">
+          <button type="submit" class="btn btn-primary">Filter</button>
+        </div>
+      </div>
+    </form>
+
+    <!-- Section 1: Food Item Summary -->
+    <h3>Total Count of Each Food Item</h3>
+    <table class="table mt-3">
+      <thead>
+        <tr>
+          <th scope="col">Food Item</th>
+          <th scope="col">Total Quantity</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for item in food_summary %}
+        <tr>
+          <td>{{ item.food_item }}</td>
+          <td>{{ item.total_quantity }}</td>
+        </tr>
+        {% empty %}
+        <tr>
+          <td colspan="2">No food items found in the selected range.</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+    <!-- Section 2: Detailed Orders Per User -->
+    <h3>Detailed Orders Per User</h3>
+    <table class="table mt-3">
+      <thead>
+        <tr>
+          <th scope="col">User</th>
+          <th scope="col">Food Item</th>
+          <th scope="col">Quantity</th>
+          <th scope="col">Booked At</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for booking in bookings %}
+          {% for order in booking.orders.all %}
+          <tr>
+            <td>{{ booking.user.username }}</td>
+            <td>{{ order.food_item }}</td>
+            <td>{{ order.quantity }}</td>
+            <td>{{ booking.booked_at }}</td>
+          </tr>
+          {% endfor %}
+        {% empty %}
+        <tr>
+          <td colspan="4">No bookings found in the selected range.</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+{% endblock %}

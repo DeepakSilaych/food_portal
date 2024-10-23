@@ -1,0 +1,52 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# C extensions
+*.so
+
+# Virtual environment
+venv/
+env/
+ENV/
+venv.bak/
+.vscode/
+
+# Django stuff:
+*.log
+*.pot
+*.pyc
+*.pyo
+*.pyd
+*.sqlite3
+db.sqlite3
+
+# Media and static files
+/media
+/staticfiles
+/static
+
+# Local development settings
+/local_settings.py
+
+# Ignore IDE and editor settings
+.idea/
+*.sublime-project
+*.sublime-workspace
+.vscode/
+*.swp
+
+# macOS specific files
+.DS_Store
+
+# Backup files
+*.bak
+
+# pipenv, poetry, etc.
+Pipfile
+Pipfile.lock
+poetry.lock
+
+# dotenv environment variables file
+.env

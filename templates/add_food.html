@@ -1,0 +1,114 @@
+{% extends "base_generic.html" %}
+{% block content %}
+  <div class="container mt-5">
+    <h2>Hardi Gujju h</h2>
+    
+    <form method="POST" id="food-form">
+      {% csrf_token %}
+      
+      <!-- PS Selection -->
+      <div class="form-group">
+        <label for="select_ps">Select PS</label>
+        <select class="form-control" id="select_ps" name="select_ps">
+          <option value="" disabled selected>Select your PS</option>
+          {% for ps_value, ps_name in ps_choices %}
+            <option value="{{ ps_value }}">{{ ps_name }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      
+      <!-- Food Items Section -->
+      <div id="food-items-section" class="mb-4">
+        <div class="form-group food-item" data-index="1">
+          <div class="d-flex justify-content-between align-items-center">
+            <div class="w-75 pr-2">
+              <label for="food_item_1">Select Food Item</label>
+              <select class="form-control" id="food_item_1" name="food_item">
+                <option value="" disabled selected>Select food item</option>
+                {% for food_value, food_name in food_choices %}
+                  <option value="{{ food_value }}">{{ food_name }}</option>
+                {% endfor %}
+              </select>
+            </div>
+            <div class="w-25">
+              <label for="quantity_1">Quantity</label>
+              <input type="number" class="form-control" id="quantity_1" name="quantity" min="1" value="1">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Add / Remove Buttons -->
+      <div class="d-flex justify-content-between">
+        <button type="button" id="add-item-btn" class="btn btn-secondary">Add Another Item</button>
+        <button type="button" id="remove-item-btn" class="btn btn-danger" style="display: none;">Remove Last Item</button>
+      </div>
+
+      <!-- Submit Button -->
+      <button type="submit" class="btn btn-primary mt-4 w-100">Book Food</button>
+    </form>
+  </div>
+
+  <!-- Dynamic JS for adding/removing items -->
+  <script>
+    let itemIndex = 1;
+
+    // Function to add a new food item row
+    document.getElementById('add-item-btn').addEventListener('click', function () {
+      itemIndex++;
+      const newFoodItemSection = `
+        <div class="form-group food-item" data-index="${itemIndex}">
+          <div class="d-flex justify-content-between align-items-center">
+            <div class="w-75 pr-2">
+              <label for="food_item_${itemIndex}">Select Food Item</label>
+              <select class="form-control" id="food_item_${itemIndex}" name="food_item">
+                <option value="" disabled selected>Select food item</option>
+                {% for food_value, food_name in food_choices %}
+                  <option value="{{ food_value }}">{{ food_name }}</option>
+                {% endfor %}
+              </select>
+            </div>
+            <div class="w-25">
+              <label for="quantity_${itemIndex}">Quantity</label>
+              <input type="number" class="form-control" id="quantity_${itemIndex}" name="quantity" min="1" value="1">
+            </div>
+          </div>
+        </div>
+      `;
+      document.getElementById('food-items-section').insertAdjacentHTML('beforeend', newFoodItemSection);
+
+      // Show remove button when more than 1 item is present
+      if (itemIndex > 1) {
+        document.getElementById('remove-item-btn').style.display = 'inline-block';
+      }
+    });
+
+    // Function to remove the last added food item row
+    document.getElementById('remove-item-btn').addEventListener('click', function () {
+      if (itemIndex > 1) {
+        document.querySelector(`#food-items-section .food-item[data-index="${itemIndex}"]`).remove();
+        itemIndex--;
+      }
+
+      // Hide remove button when only 1 item is left
+      if (itemIndex === 1) {
+        document.getElementById('remove-item-btn').style.display = 'none';
+      }
+    });
+
+    // Simple form validation for quantity
+    document.getElementById('food-form').addEventListener('submit', function (e) {
+      let quantities = document.querySelectorAll('input[name="quantity"]');
+      let valid = true;
+      quantities.forEach(function (input) {
+        if (input.value < 1 || input.value === '') {
+          valid = false;
+        }
+      });
+      if (!valid) {
+        alert('Please ensure that all quantities are at least 1.');
+        e.preventDefault();
+      }
+    });
+  </script>
+{% endblock %}
