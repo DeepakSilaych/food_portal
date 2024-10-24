@@ -12,6 +12,7 @@ DEBUG = True
 ALLOWED_HOSTS = ['*']
 ALLOWED_HOSTS_ALL = True
 CSRF_TRUSTED_ORIGINS_ALL = True
+CSRF_TRUSTED_ORIGINS = ['http://localhost:8000', 'https://andhapaisa.tech-iitb.org', 'https://andhapaisa.tech-iitb.org/']
 CSRF_COOKIE_SAMESITE = None
 
 
